@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Prototipo1</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+ <string name="NoBlueTooth">Su dispositivo no cuenta con bluetooth</string>
+	  <string name="BlueTooth">Bluetooth</string>
+	   <string name="visibleh">Visible</string>
+	   <string name="activalo">Enciende el adaptador Bluetooth Primero</string>
+</resources>
