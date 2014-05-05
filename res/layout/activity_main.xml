@@ -8,25 +8,69 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/btnVisible"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/switchBluetooth"
-        android:layout_alignBottom="@+id/switchBluetooth"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@+id/switchBluetooth"
-        android:text="@string/BlueTooth" />
-
-    <Switch
-        android:id="@+id/switchBluetooth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <Switch
+
+		android:id="@+id/switchBluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignTop="@+id/linearLayout1"
         android:text="@string/BlueTooth" />
-    
+
+    <Button
+
+
+		 android:id="@+id/btnVisible"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignBaseline="@+id/switchBluetooth"
+        android:layout_alignBottom="@+id/switchBluetooth"
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@+id/switchBluetooth"
+        android:text="@string/visibleh" />
+
+    <ListView
+        android:id="@+id/listCon"
+        android:layout_width="wrap_content"
+        android:layout_height="240dp"
+        android:layout_alignBottom="@+id/linearLayout1"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_below="@+id/textView2" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_below="@+id/switchBluetooth"
+        android:text="@string/elige"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignRight="@+id/listCon"
+        android:layout_below="@+id/textView1"
+        android:text="------------------------"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>
