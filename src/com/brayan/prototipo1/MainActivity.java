@@ -13,15 +13,19 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnItemClickListener{
 	BluetoothAdapter adaptadorBlue = BluetoothAdapter.getDefaultAdapter();
 	int RES = 1;
 	ListView lista;
@@ -62,8 +66,7 @@ public class MainActivity extends Activity {
 					EstadoBlu.setChecked(false);
 					ActualizarLista(false);
 				} else {
-						activarBluetooth();
-						
+						activarBluetooth();  //se encarga de todo hasta de la respuesta		
 				}
 			}
 		} );
@@ -82,16 +85,9 @@ public class MainActivity extends Activity {
 				
 			}
 		});
-		if (TieneBluetooht()){
-			
-			
-			
-			
-		}
-		//modifico la lista
-		//obtengo la lista de los dispositivos que se agregaron
-		
+		lista.setOnItemClickListener(this);  //adapto a este mismo onItemClickListener
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,6 +96,23 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int pocision,
+			long id) {
+		// TODO Auto-generated method stub
+		//String menj = Integer.toString(pocision); //empieza en cero
+		//String menj = ((TextView) view).getText().toString(); //nos da el nombre del seleccionado
+		if (pocision == CONTACTOS.size()){
+			//agrear nuevo
+			Toast.makeText(getApplicationContext(), "AGREGAR NUEVO", Toast.LENGTH_SHORT).show();
+		}
+		//enviar los parametron necesarios para iniciar los encuentros
+		
+		
+	}
+	
+	
+	//*******************************METODOS BAJO *****************************//
 	public void ActualizarLista(boolean T){
 		lista = (ListView) findViewById(R.id.listCon);
 		if (!T){
@@ -188,5 +201,10 @@ public class MainActivity extends Activity {
 			return CONTACTOS;
 
 		}
+
+
+		
+
+		
 
 }
