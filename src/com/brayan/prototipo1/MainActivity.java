@@ -27,13 +27,13 @@ public class MainActivity extends Activity {
 	ListView lista;
 	ArrayList<String> nombres;
 	LinkedList<BluetoothDevice> CONTACTOS;
-	
+	Switch EstadoBlu;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		lista = (ListView) findViewById(R.id.listCon);
-		final Switch EstadoBlu = (Switch) findViewById(R.id.switchBluetooth);
+		 EstadoBlu = (Switch) findViewById(R.id.switchBluetooth);
 		Button EstadoVisi =  (Button)findViewById(R.id.btnVisible);
 		if (TieneBluetooht()){
 			if (estaActivadoBluetooth()){
@@ -63,8 +63,7 @@ public class MainActivity extends Activity {
 					ActualizarLista(false);
 				} else {
 						activarBluetooth();
-						EstadoBlu.setChecked(true);
-						ActualizarLista(true);
+						
 				}
 			}
 		} );
@@ -141,9 +140,22 @@ public class MainActivity extends Activity {
 			 RES = 1;
 			if (!adaptadorBlue.isEnabled()){
 				Intent iniciarBlue = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(iniciarBlue,RES);		
+				startActivityForResult(iniciarBlue,1);		
 			}
 
+		}
+		
+		protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		    System.out.println(resultCode);
+		    if (resultCode == 0) {
+		    	//no lo activo
+		        ActualizarLista(false);
+		        EstadoBlu.setChecked(false);
+		    } else {
+		    	//si lo activo
+		        ActualizarLista(true);
+		        EstadoBlu.setChecked(true);
+		    }
 		}
 		
 		public boolean estaActivadoBluetooth(){
