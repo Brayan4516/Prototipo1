@@ -1,7 +1,6 @@
 package com.brayan.prototipo1;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -9,11 +8,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.content.IntentFilter;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
@@ -104,7 +103,11 @@ public class MainActivity extends Activity implements OnItemClickListener{
 		//String menj = ((TextView) view).getText().toString(); //nos da el nombre del seleccionado
 		if (pocision == CONTACTOS.size()){
 			//agrear nuevo
-			Toast.makeText(getApplicationContext(), "AGREGAR NUEVO", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getApplicationContext(), "AGREGAR NUEVO", Toast.LENGTH_SHORT).show();
+			
+			Intent nuev = new Intent(this,AgregarNuevoActivity.class);
+			startActivity(nuev);
+			
 		}
 		//enviar los parametron necesarios para iniciar los encuentros
 		
@@ -191,7 +194,7 @@ public class MainActivity extends Activity implements OnItemClickListener{
 			LinkedList<BluetoothDevice> CONTACTOS = new LinkedList<BluetoothDevice>();
 
 			if (vinculados.size() > 0) {
-				Toast.makeText(getApplicationContext(), "mayor", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), "mayor", Toast.LENGTH_LONG).show();
 				for (BluetoothDevice dispo : vinculados){
 					//crear un arreglo, dispo.getName() , dispo.getAdress()
 					CONTACTOS.add(dispo);
@@ -204,7 +207,8 @@ public class MainActivity extends Activity implements OnItemClickListener{
 
 
 		
-
+		// Create a BroadcastReceiver for ACTION_FOUND
+		
 		
 
 }

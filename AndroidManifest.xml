@@ -29,6 +29,10 @@
             android:name="com.brayan.prototipo1.FragmentListaContactos"
             android:label="@string/title_activity_lista_contactos" >
         </activity>
+        <activity
+            android:name="com.brayan.prototipo1.AgregarNuevoActivity"
+            android:label="@string/title_activity_agregar_nuevo" >
+        </activity>
     </application>
 
 </manifest>

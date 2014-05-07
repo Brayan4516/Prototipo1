@@ -10,5 +10,9 @@
     <string name="activalo">Enciende el adaptador Bluetooth Primero</string>
     <string name="elige">Selecciona contrincante</string>
     <string name="title_activity_lista_contactos">ListaContactos</string>
-
+    <string name="title_activity_agregar_nuevo">AgregarNuevoActivity</string>
+	<string name="Buscar">Buscar</string>
+	<string name="Selecciona">Selecciona un dispositivo</string>
+	<string name="NoNuevosFind">No se encontraron nuevos dispositivos</string>
+	
 </resources>
