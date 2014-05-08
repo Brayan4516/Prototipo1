@@ -33,6 +33,10 @@
             android:name="com.brayan.prototipo1.AgregarNuevoActivity"
             android:label="@string/title_activity_agregar_nuevo" >
         </activity>
+        <activity
+            android:name="com.brayan.prototipo1.Totito"
+            android:label="@string/title_activity_totito" >
+        </activity>
     </application>
 
 </manifest>
