@@ -1,5 +1,7 @@
 package com.brayan.prototipo1;
 
+import java.util.Vector;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -104,6 +106,69 @@ public class Totito extends Activity {
             }
         }
     }
+    
+    
+    
+    //TODO LO DEL JUEGO
+    	
+    	/**
+    	 * !1!2!3
+    	 * -------
+    	 * !4!5!6
+    	 * -------
+    	 * !7!8!9
+    	 */
+    	 
+    	int[] libres;
+    	Vector<Integer> mios;
+    	Vector<Integer> enemigo;
+    	public void inciarTotito(){
+    		libres = new int[]{1,2,3,4,5,6,7,8,9};
+    		mios = new Vector<Integer>(9);
+    		enemigo = new Vector<Integer>(9);
+    		
+    	}
+    	
+    	
+    	public void marcar(int pos,boolean propio){
+    		if (libres[pos - 1] != 0) {
+    			libres[pos - 1] = 0;
+    			boolean ganador = false;
+    			if (propio){
+    				mios.add(pos);
+    				ganador = verificarGanador(mios);
+    			} else {
+    				enemigo.add(pos);
+    				ganador = verificarGanador(enemigo);
+    			}
+    			if (ganador && propio){
+    				//yo gane
+    				
+    			} else if (ganador && !propio) {
+    				//me ganaron
+    				
+    			}
+    			
+    			
+    		} else {
+    			//ya se uso esa casilla
+    			
+    		}
+    	}
+    	
+    	public boolean verificarGanador(Vector<Integer> analizar){
+			return false;
+    		//posibles jugadas
+    		//hacia abajo  741 (1)	852(2)	963(3)
+    		//hacia lado   789(4) 	456(5)	123(6)
+    		//cruzado		159(7)	357(8)
+    		//casos hacia abajo
+    		
+    		
+    	}
+    	
+    	
+    //
     private void setupChat() {
         Log.d(TAG, "setupChat()");
         // Initialize the array adapter for the conversation thread
