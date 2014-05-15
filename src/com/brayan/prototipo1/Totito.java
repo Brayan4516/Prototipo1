@@ -1,5 +1,6 @@
 package com.brayan.prototipo1;
 
+import java.util.Random;
 import java.util.Vector;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -22,11 +24,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Totito extends Activity {
+public class Totito extends Activity implements OnClickListener {
 
 	private static final String TAG = "BluetoothChat";
     private static final boolean D = true;
@@ -43,10 +46,12 @@ public class Totito extends Activity {
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     // Layout Views
-    private TextView mTitle;
-    private ListView mConversationView;
+    private TextView TxtInfo;
     private EditText mOutEditText;
-    private Button mSendButton;
+    
+   
+	private ImageButton bt1, bt2,bt3,bt4,bt5,bt6,bt7,bt8,bt9;
+	
     // Name of the connected device
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
@@ -57,17 +62,29 @@ public class Totito extends Activity {
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
     private BluetoothConectChanel mChatService = null;
+    
+    String CONTRINCANTE;
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
         // Set up the window layout
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+       
         setContentView(R.layout.activity_totito);
        
-        
-        
-        
+        Intent iin= getIntent();
+        Bundle b = iin.getExtras();
+        String j = "";
+        if(b!=null)
+        {
+             j =(String) b.get("direccion");
+            
+        }
+        if(D) Log.e(TAG, "DIRECCION: " + j);
+        CONTRINCANTE = j;
+        inciarTotito();
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         // If the adapter is null, then Bluetooth is not supported
@@ -76,6 +93,8 @@ public class Totito extends Activity {
             finish();
             return;
         }
+        
+        
     }
     @Override
     public void onStart() {
@@ -88,7 +107,7 @@ public class Totito extends Activity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         // Otherwise, setup the chat session
         } else {
-            if (mChatService == null) setupChat();
+            if (mChatService == null) setupChat();	//inicia 
         }
     }
     @Override
@@ -110,6 +129,11 @@ public class Totito extends Activity {
     
     
     //TODO LO DEL JUEGO
+    
+    public int SYNC = 0;
+    public boolean FINISH_GAME = false;
+    boolean Jugador1 = true;
+    Boolean Jugador2 = false;
     	
     	/**
     	 * !1!2!3
@@ -136,18 +160,26 @@ public class Totito extends Activity {
     			boolean ganador = false;
     			if (propio){
     				mios.add(pos);
+    				//enviar mensaje
+    				cambiar(pos, true);
     				ganador = verificarGanador(mios);
     			} else {
     				enemigo.add(pos);
+    				cambiar(pos, false);
     				ganador = verificarGanador(enemigo);
+    				Log.d(TAG, "verifico enemigo!!!!!!!!!!!: " + ganador + enemigo.get(0));
+    				if (ganador){
+    					Log.d(TAG, "GANO ENEMIGO!!!!!!!!!!!: " + ganador + enemigo.get(0));
+    					FINISH_GAME = true;
+        				TxtInfo.setText(getText(R.string.perdiste));
+    				}
     			}
+    			
     			if (ganador && propio){
     				//yo gane
-    				
-    			} else if (ganador && !propio) {
-    				//me ganaron
-    				
-    			}
+    				FINISH_GAME = true;
+    				TxtInfo.setText(getText(R.string.ganaste));
+    			} 
     			
     			
     		} else {
@@ -156,43 +188,296 @@ public class Totito extends Activity {
     		}
     	}
     	
+    	//comandos de juego
+    	//CA=1  indicar casilla a la cula colocar
+    	//restart  reinicia el juego
+    	//finish  termino partida, desconectar
+    	
+    	
     	public boolean verificarGanador(Vector<Integer> analizar){
-			return false;
+			
     		//posibles jugadas
     		//hacia abajo  741 (1)	852(2)	963(3)
     		//hacia lado   789(4) 	456(5)	123(6)
     		//cruzado		159(7)	357(8)
     		//casos hacia abajo
-    		
-    		
+			if (analizar.contains(7) && analizar.contains(4) && analizar.contains(1)){
+				bt1.setEnabled(false);
+				return true;
+			} else if (analizar.contains(8) && analizar.contains(5) && analizar.contains(2)){
+				return true;
+			} else if (analizar.contains(9) && analizar.contains(6) && analizar.contains(3)){
+				return true;
+			} else if (analizar.contains(7) && analizar.contains(8) && analizar.contains(9)){
+				return true;
+			} else if (analizar.contains(4) && analizar.contains(5) && analizar.contains(6)){
+				return true;
+			} else if (analizar.contains(1) && analizar.contains(2) && analizar.contains(3)){
+				return true;
+			} else if (analizar.contains(1) && analizar.contains(5) && analizar.contains(9)){
+				return true;
+			} else if (analizar.contains(7) && analizar.contains(5) && analizar.contains(3)){
+				return true;
+			}
+    		return false;
     	}
+    	
+    	public void cambiar(int po, boolean mio){		
+    		switch(po){
+			case 1:
+				if (mio){
+					if (Jugador1){
+    					bt1.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt1.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt1.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt1.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 2:
+				if (mio){
+					if (Jugador1){
+    					bt2.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt2.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt2.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt2.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 3:
+				if (mio){
+					if (Jugador1){
+    					bt3.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt3.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt3.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt3.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 4:
+				if (mio){
+					if (Jugador1){
+    					bt4.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt4.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt4.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt4.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 5:
+				if (mio){
+					if (Jugador1){
+    					bt5.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt5.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt5.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt5.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 6:
+				if (mio){
+					if (Jugador1){
+    					bt6.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt6.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt6.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt6.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 7:
+				if (mio){
+					if (Jugador1){
+    					bt7.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt7.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt7.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt7.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 8:
+				if (mio){
+					if (Jugador1){
+    					bt8.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt8.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt8.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt8.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			case 9:
+				if (mio){
+					if (Jugador1){
+    					bt9.setBackgroundResource(R.drawable.equis);
+    				} else if (Jugador2){
+    					bt9.setBackgroundResource(R.drawable.circulo);
+    				}
+				} else {
+					if (Jugador1){
+    					bt9.setBackgroundResource(R.drawable.circulo);
+    				} else if (Jugador2){
+    					bt9.setBackgroundResource(R.drawable.equis);
+    				}
+				}
+				break;
+			}
+    	}
+    	//termina el juego
     	
     	
     //
     private void setupChat() {
         Log.d(TAG, "setupChat()");
-        // Initialize the array adapter for the conversation thread
-       /* mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-        mConversationView = (ListView) findViewById(R.id.in);
-        mConversationView.setAdapter(mConversationArrayAdapter);
-        // Initialize the compose field with a listener for the return key
-        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-        mOutEditText.setOnEditorActionListener(mWriteListener);
-        // Initialize the send button with a listener that for click events
-        mSendButton = (Button) findViewById(R.id.button_send);
-        mSendButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                TextView view = (TextView) findViewById(R.id.edit_text_out);
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-        });*/
+      
+        // Initialize the array adapter for the conversation thread      
+        bt1 = (ImageButton) findViewById(R.id.ImageButton01);
+        bt2 = (ImageButton) findViewById(R.id.ImageButton02);
+        bt3 = (ImageButton) findViewById(R.id.ImageButton03);
+        bt4 = (ImageButton) findViewById(R.id.ImageButton04);
+        bt5 = (ImageButton) findViewById(R.id.ImageButton05);
+        bt6 = (ImageButton) findViewById(R.id.ImageButton06);
+        bt7 = (ImageButton) findViewById(R.id.ImageButton07);
+        bt8 = (ImageButton) findViewById(R.id.ImageButton08);
+        bt9 = (ImageButton) findViewById(R.id.ImageButton09);
+        bt1.setOnClickListener(this);
+        bt2.setOnClickListener(this);
+        bt3.setOnClickListener(this);
+        bt4.setOnClickListener(this);
+        bt5.setOnClickListener(this);
+        bt6.setOnClickListener(this);
+        bt7.setOnClickListener(this);
+        bt8.setOnClickListener(this);
+        bt9.setOnClickListener(this);
+        TxtInfo = (TextView) findViewById(R.id.textinfo1);
+        TxtInfo.setText(getText(R.string.Espernado_contrin));
         // Initialize the BluetoothConectChanel to perform bluetooth connections
         mChatService = new BluetoothConectChanel(this, mHandler);
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(CONTRINCANTE);
+        // Attempt to connect to the device
+        mChatService.connect(device);
+        
     }
+    
+    
+    public boolean marcando = true;  //si esta esperando al otro a que se conecte o marque la opcion
+    		
+    @Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+    	if(FINISH_GAME){return;} //ya termino el juego
+    	if (marcando) {
+    		//ya envio su opcion
+    		
+    		return;
+    	}
+    	marcando = true;
+    	
+		if (v.getId() == bt1.getId()){
+			if (libres[0] != 0){
+				sendMessage("CA=1");
+				
+				marcar(1, true);
+			}
+			
+		} else if (v.getId() == bt2.getId()){
+			if (libres[1] != 0){
+				sendMessage("CA=2");
+				marcar(2, true);
+			}
+			
+		}else if (v.getId() == bt3.getId()){
+			if (libres[2] != 0){
+				sendMessage("CA=3");
+				marcar(3, true);
+			}
+			
+		}else if (v.getId() == bt4.getId()){
+			if (libres[3] != 0){
+				sendMessage("CA=4");
+				marcar(4, true);
+			}
+			
+		}else if (v.getId() == bt5.getId()){
+			if (libres[4] != 0){
+				sendMessage("CA=5");
+				marcar(5, true);
+			}
+			
+		}else if (v.getId() == bt6.getId()){
+			if (libres[5] != 0){
+				sendMessage("CA=6");
+				marcar(6, true);
+			}
+			
+		}else if (v.getId() == bt7.getId()){
+			if (libres[6] != 0){
+				sendMessage("CA=7");
+				marcar(7, true);
+			}
+			
+		}else if (v.getId() == bt8.getId()){
+			if (libres[7] != 0){
+				sendMessage("CA=8");
+				marcar(8, true);
+			}
+			
+		}else if (v.getId() == bt9.getId()){
+			if (libres[8] != 0){
+				sendMessage("CA=9");
+				marcar(9, true);
+			}
+		}
+		
+	}
+    
+    public void sincronizar(){
+    	 Random rnd = new Random();
+    	 SYNC = rnd.nextInt(10);
+    	sendMessage("SY=" + SYNC);
+    }
+    
+    
     @Override
     public synchronized void onPause() {
         super.onPause();
@@ -225,6 +510,7 @@ public class Totito extends Activity {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
+    	 if(D) Log.e(TAG, "ENVIAR MENSAJE");
         if (mChatService.getState() != BluetoothConectChanel.STATE_CONNECTED) {
          //   Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
@@ -236,22 +522,12 @@ public class Totito extends Activity {
             mChatService.write(send);
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
+           
         }
     }
-    // The action listener for the EditText widget, to listen for the return key
-    private TextView.OnEditorActionListener mWriteListener =
-        new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            if(D) Log.i(TAG, "END onEditorAction");
-            return true;
-        }
-    };
+    
+    
+    
     // The Handler that gets information back from the BluetoothConectChanel
     private final Handler mHandler = new Handler() {
         @Override
@@ -262,35 +538,106 @@ public class Totito extends Activity {
                 switch (msg.arg1) {
                 case BluetoothConectChanel.STATE_CONNECTED:
                  //   mTitle.setText(R.string.title_connected_to);
-                    mTitle.append(mConnectedDeviceName);
-                    mConversationArrayAdapter.clear();
+                //    mTitle.append(mConnectedDeviceName);
+                   // mConversationArrayAdapter.clear(); //NOVA
                     break;
                 case BluetoothConectChanel.STATE_CONNECTING:
-                //    mTitle.setText(R.string.title_connecting);
+                //    mTitle.setText("Conectando");
                     break;
                 case BluetoothConectChanel.STATE_LISTEN:
                 case BluetoothConectChanel.STATE_NONE:
-                //    mTitle.setText(R.string.title_not_connected);
+                //    mTitle.setText("No conectado");
                     break;
                 }
                 break;
             case MESSAGE_WRITE:
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
-                String writeMessage = new String(writeBuf);
-                mConversationArrayAdapter.add("Me:  " + writeMessage);
+                if (!FINISH_GAME){
+    				if (TxtInfo.getText().equals(getText(R.string.Su_turno))){
+        				TxtInfo.setText(getText(R.string.turno_de));
+        			} else {
+        				TxtInfo.setText(getText(R.string.Su_turno));
+        			}
+    			}
+                //SE VUELVE A MOSTRAR LO QUE SE ENVIA
+                
+             /*   String writeMessage = new String(writeBuf); //de valde lo alamaceno
+                
+                mConversationArrayAdapter.add("Me:  " + writeMessage);//NOVA*/
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
-                String readMessage = new String(readBuf, 0, msg.arg1);
-                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                
+                //SE OBIENE EL MENSAJE POR LO QUE SE EJECUTA LO QUE SE RECIBE
+                
+                String cm = new String(readBuf, 0, msg.arg1);
+                
+                if (cm.contains("CA=")){
+        			//comando de colocacion
+        			cm = cm.substring(3, 4);
+        			marcar(Integer.parseInt(cm), false);
+        			//cambio de turno
+        			Log.d(TAG, "MENSAJE: " + cm);
+        			Log.d(TAG, "ESTADO A CAMBIAR " + marcando);
+        			if (marcando){
+        				marcando = false;	
+        			} else {
+        				marcando = true;
+        			}
+        			
+        			if (!FINISH_GAME){
+        				if (TxtInfo.getText().equals(getText(R.string.Su_turno))){
+            				TxtInfo.setText(getText(R.string.turno_de));
+            			} else {
+            				TxtInfo.setText(getText(R.string.Su_turno));
+            			}
+        			}
+        			
+        			Log.d(TAG, "ESTADO TRAS RECIBIR " + marcando);
+        		} else if (cm.equals("reset")){
+        			//reiniciar
+        			
+        			
+        		} else if (cm.equals("finish")){
+        			//terminar
+        			
+        			
+        		} else if (cm.contains("SY=")){
+        			cm = cm.substring(3, 4);
+        			if (SYNC ==Integer.parseInt(cm) )
+        			{
+        				sincronizar();
+        			} else if (SYNC > Integer.parseInt(cm)){
+        				Jugador1 = true;
+        				Jugador2 = false;
+        			} else {
+        				Jugador2 = true;
+        				Jugador1 = false;
+        			}
+        			//decide quien va primero
+        			
+        			if (Jugador2){
+        				marcando = true;
+        				TxtInfo.setText(getText(R.string.turno_de));
+        			} else {
+        				marcando = false;
+        				TxtInfo.setText(getText(R.string.Su_turno));
+        			}
+        			Log.d(TAG, "ESTADO INICIAL: " + marcando);
+        		}
+                
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                 Toast.makeText(getApplicationContext(), "Connected to "
                                + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+               
+                sincronizar();
+                //sendMessage("SY=" + rnd.nextInt(10));
+                
                 break;
             case MESSAGE_TOAST:
                 Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
@@ -299,20 +646,22 @@ public class Totito extends Activity {
             }
         }
     };
+    
+    
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
-      /*  switch (requestCode) {
+        switch (requestCode) {
         case REQUEST_CONNECT_DEVICE:
             // When DeviceListActivity returns with a device to connect
-            if (resultCode == Activity.RESULT_OK) {
+         /*   if (resultCode == Activity.RESULT_OK) {
                 // Get the device MAC address
                 String address = data.getExtras()
-                                     .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                                     .getString(MainActivity.EXTRA_DEVICE_ADDRESS);
                 // Get the BLuetoothDevice object
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                 // Attempt to connect to the device
                 mChatService.connect(device);
-            }
+            }*/ //INVESTIGAR MAS
             break;
         case REQUEST_ENABLE_BT:
             // When the request to enable Bluetooth returns
@@ -322,33 +671,20 @@ public class Totito extends Activity {
             } else {
                 // User did not enable Bluetooth or an error occured
                 Log.d(TAG, "BT not enabled");
-                Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                finish();
+               // Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+               // finish();
             }
-        }*/
+        }
     }
+    
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
       //  inflater.inflate(R.menu.option_menu, menu);
         return true;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    /*    switch (item.getItemId()) {
-        case R.id.scan:
-            // Launch the DeviceListActivity to see devices and do scan
-            Intent serverIntent = new Intent(this, DeviceListActivity.class);
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-            return true;
-        case R.id.discoverable:
-            // Ensure this device is discoverable by others
-            ensureDiscoverable();
-            return true;
-        }
-        
-        */
-        return false;
-    }
+ 
+	
 }
 

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,16 +38,23 @@ public class BluetoothConectChanel {
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+    
+    
+    
     /**
      * Constructor. Prepares a new Totito session.
      * @param context  The UI Activity Context
      * @param handler  A Handler to send messages back to the UI Activity
      */
+    
+    
     public BluetoothConectChanel(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
     }
+    
+    
     /**
      * Set the current state of the chat connection
      * @param state  An integer defining the current connection state
@@ -57,16 +65,20 @@ public class BluetoothConectChanel {
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(Totito.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
+    
+    
     /**
      * Return the current connection state. */
     public synchronized int getState() {
         return mState;
     }
+    
+    
     /**
      * Start the chat service. Specifically start AcceptThread to begin a
      * session in listening (server) mode. Called by the Activity onResume() */
     public synchronized void start() {
-        if (D) Log.d(TAG, "start");
+        if (D) {Log.d(TAG, "start");}
         // Cancel any thread attempting to make a connection
         if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
         // Cancel any thread currently running a connection
@@ -78,6 +90,9 @@ public class BluetoothConectChanel {
         }
         setState(STATE_LISTEN);
     }
+    
+    
+    
     /**
      * Start the ConnectThread to initiate a connection to a remote device.
      * @param device  The BluetoothDevice to connect
@@ -95,6 +110,10 @@ public class BluetoothConectChanel {
         mConnectThread.start();
         setState(STATE_CONNECTING);
     }
+    
+    
+    
+    
     /**
      * Start the ConnectedThread to begin managing a Bluetooth connection
      * @param socket  The BluetoothSocket on which the connection was made
@@ -119,6 +138,8 @@ public class BluetoothConectChanel {
         mHandler.sendMessage(msg);
         setState(STATE_CONNECTED);
     }
+    
+    
     /**
      * Stop all threads
      */
@@ -129,6 +150,8 @@ public class BluetoothConectChanel {
         if (mAcceptThread != null) {mAcceptThread.cancel(); mAcceptThread = null;}
         setState(STATE_NONE);
     }
+    
+    
     /**
      * Write to the ConnectedThread in an unsynchronized manner
      * @param out The bytes to write
@@ -145,6 +168,10 @@ public class BluetoothConectChanel {
         // Perform the write unsynchronized
         r.write(out);
     }
+    
+    
+    
+    
     /**
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
@@ -157,6 +184,10 @@ public class BluetoothConectChanel {
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
+    
+    
+    
+    
     /**
      * Indicate that the connection was lost and notify the UI Activity.
      */
@@ -169,6 +200,9 @@ public class BluetoothConectChanel {
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
+    
+    
+    
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted
@@ -234,6 +268,9 @@ public class BluetoothConectChanel {
             }
         }
     }
+    
+    
+    
     /**
      * This thread runs while attempting to make an outgoing connection
      * with a device. It runs straight through; the connection either
@@ -266,6 +303,7 @@ public class BluetoothConectChanel {
                 mmSocket.connect();
             } catch (IOException e) {
                 connectionFailed();
+                Log.i(TAG, e.toString());
                 // Close the socket
                 try {
                     mmSocket.close();
@@ -291,6 +329,9 @@ public class BluetoothConectChanel {
             }
         }
     }
+    
+    
+    
     /**
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
@@ -333,6 +374,9 @@ public class BluetoothConectChanel {
                 }
             }
         }
+        
+        
+        
         /**
          * Write to the connected OutStream.
          * @param buffer  The bytes to write

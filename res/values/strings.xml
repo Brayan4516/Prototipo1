@@ -12,6 +12,11 @@
     <string name="title_activity_lista_contactos">ListaContactos</string>
     <string name="title_activity_agregar_nuevo">AgregarNuevoActivity</string>
     <string name="Buscar">Buscar</string>
+    <string name="Espernado_contrin">  Esperando por contrincante</string>
+    <string name="Su_turno">Su turno </string>
+    <string name="turno_de"> Turno de contrincante </string>
+     <string name="ganaste"> GANASTE!!! </string>
+    <string name="perdiste"> Perdiste!! </string>
     <string name="Selecciona">Selecciona un dispositivo</string>
     <string name="NoNuevosFind">No se encontraron nuevos dispositivos</string>
     <string name="title_activity_totito">Totito</string>

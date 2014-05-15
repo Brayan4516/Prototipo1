@@ -24,7 +24,7 @@
             android:layout_height="wrap_content" >
 			
             <ImageButton
-                android:id="@+id/ImageButton02"
+                android:id="@+id/ImageButton01"
                 android:layout_width="90dp"
                 android:layout_height="100dp"
                 android:background="#ffffff"
@@ -33,7 +33,7 @@
 
             
             <ImageButton
-                android:id="@+id/ImageButton01"
+                android:id="@+id/ImageButton02"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="#ffffff"
@@ -120,9 +120,14 @@
             android:id="@+id/tableRow4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
+
         </TableRow>
 
-        
+        <TextView
+            android:id="@+id/textinfo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
     </TableLayout>
 

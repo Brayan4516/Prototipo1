@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements OnItemClickListener{
 	LinkedList<BluetoothDevice> CONTACTOS;
 	Switch EstadoBlu;
 	
+	public static String EXTRA_DEVICE_ADDRESS = "device_address";
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -107,11 +109,14 @@ public class MainActivity extends Activity implements OnItemClickListener{
 			
 			Intent nuev = new Intent(this,AgregarNuevoActivity.class);
 			startActivity(nuev);
-			
+			return;
 		}
+		//obtengo el dispositivo
+		
 		//enviar los parametron necesarios para iniciar los encuentros
-		
-		
+		Intent i = new Intent(this, Totito.class);   
+		i.putExtra("direccion", CONTACTOS.get(pocision).getAddress());
+		startActivity(i);
 	}
 	
 	
