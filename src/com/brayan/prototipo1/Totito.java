@@ -202,21 +202,44 @@ public class Totito extends Activity implements OnClickListener {
     		//cruzado		159(7)	357(8)
     		//casos hacia abajo
 			if (analizar.contains(7) && analizar.contains(4) && analizar.contains(1)){
-				bt1.setEnabled(false);
+				bt7.setBackgroundResource(R.drawable.check);
+				bt4.setBackgroundResource(R.drawable.check);
+				bt1.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(8) && analizar.contains(5) && analizar.contains(2)){
+				bt8.setBackgroundResource(R.drawable.check);
+				bt5.setBackgroundResource(R.drawable.check);
+				bt2.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(9) && analizar.contains(6) && analizar.contains(3)){
+				bt9.setBackgroundResource(R.drawable.check);
+				bt6.setBackgroundResource(R.drawable.check);
+				bt3.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(7) && analizar.contains(8) && analizar.contains(9)){
+				bt7.setBackgroundResource(R.drawable.check);
+				bt8.setBackgroundResource(R.drawable.check);
+				bt9.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(4) && analizar.contains(5) && analizar.contains(6)){
+				bt4.setBackgroundResource(R.drawable.check);
+				bt5.setBackgroundResource(R.drawable.check);
+				bt6.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(1) && analizar.contains(2) && analizar.contains(3)){
+				bt1.setBackgroundResource(R.drawable.check);
+				bt2.setBackgroundResource(R.drawable.check);
+				bt3.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(1) && analizar.contains(5) && analizar.contains(9)){
+				bt1.setBackgroundResource(R.drawable.check);
+				bt5.setBackgroundResource(R.drawable.check);
+				bt9.setBackgroundResource(R.drawable.check);
 				return true;
 			} else if (analizar.contains(7) && analizar.contains(5) && analizar.contains(3)){
+				bt7.setBackgroundResource(R.drawable.check);
+				bt5.setBackgroundResource(R.drawable.check);
+				bt3.setBackgroundResource(R.drawable.check);
 				return true;
 			}
     		return false;
@@ -606,12 +629,15 @@ public class Totito extends Activity implements OnClickListener {
         			
         		} else if (cm.contains("SY=")){
         			cm = cm.substring(3, 4);
+        			
         			if (SYNC ==Integer.parseInt(cm) )
         			{
         				sincronizar();
+        				return;
         			} else if (SYNC > Integer.parseInt(cm)){
         				Jugador1 = true;
         				Jugador2 = false;
+        				
         			} else {
         				Jugador2 = true;
         				Jugador1 = false;
@@ -621,7 +647,7 @@ public class Totito extends Activity implements OnClickListener {
         			if (Jugador2){
         				marcando = true;
         				TxtInfo.setText(getText(R.string.turno_de));
-        			} else {
+        			} else if (Jugador1) {
         				marcando = false;
         				TxtInfo.setText(getText(R.string.Su_turno));
         			}
@@ -651,18 +677,6 @@ public class Totito extends Activity implements OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
-        case REQUEST_CONNECT_DEVICE:
-            // When DeviceListActivity returns with a device to connect
-         /*   if (resultCode == Activity.RESULT_OK) {
-                // Get the device MAC address
-                String address = data.getExtras()
-                                     .getString(MainActivity.EXTRA_DEVICE_ADDRESS);
-                // Get the BLuetoothDevice object
-                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-                // Attempt to connect to the device
-                mChatService.connect(device);
-            }*/ //INVESTIGAR MAS
-            break;
         case REQUEST_ENABLE_BT:
             // When the request to enable Bluetooth returns
             if (resultCode == Activity.RESULT_OK) {
